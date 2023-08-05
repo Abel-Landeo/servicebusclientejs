@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure servicebus main</title>
+    <link rel="stylesheet" href="../common/main.css">
+</head>
+
+<body>
+    <div class="row">
+        <div class="column width-menu">
+            <div class="vertical-menu">
+
+            </div>
+            <script src="../common/menu.js"></script>
+        </div>
+        <div class="column width-content">
+            <h2 id="idTitle"></h2>
+            <div class="tab">
+                <button class="tablinks" onclick="openTab(event, 'idSubsTab')">Subscriptions</button>
+                <button class="tablinks" onclick="openTab(event, 'idReceiverTab')">Receiver</button>
+                <button class="tablinks" onclick="openTab(event, 'idSenderTab')">Sender</button>
+            </div>
+            <div id="idSubsTab" class="tabcontent">
+                <strong id="idHeaderSubs">
+                    <span>Please wait...</span>
+                    <button id="idRefreshBtn">refresh</button>
+                    <button id="idNewBtn">Create</button>
+                </strong>
+                <div>
+                    <input type="text" id="idTextNewSubs" placeholder="new subscription name">
+                </div>
+                <ul id="idListSubs"></ul>
+                <button id="idUpdateConfigBtn">Update config</button>
+                <textarea rows="25" id="idTextArea"></textarea>
+            </div>
+
+            <div id="idReceiverTab" class="tabcontent">
+                <select id="idReceiverSelect"></select>
+                <input type="checkbox" id="idDlCheck" />
+                <label for="idDlCheck">is deadletter?</label>
+                <input type="checkbox" id="idReceiveCheck" />
+                <label for="idReceiveCheck">peek and delete?</label>
+                <button id="idReceiveBtn">peek</button>
+                <button id="idDownloadBtn">download</button>
+                <span id="idIpcLog"></span>
+                <p id="idTblTitle"></p>
+                <div class="row">
+                    <div class="column" style="width: 30%;">
+                        <ol id="idReceiveList"></ol>
+                    </div>
+                    <div class="column" style="width: 70%;">
+                        <textarea id="idTaMessage" rows="30" readonly></textarea>
+                    </div>
+                    
+                </div>
+                
+            </div>
+
+            <div id="idSenderTab" class="tabcontent">
+                <p>Application properties</p>
+                <textarea id="idTaApplicationProps" rows="2">{}</textarea>
+                <p>Body</p>
+                <textarea id="idTaBodyMessage" rows="20">{}</textarea>
+                <button id="idSendBtn">Send</button>
+            </div>
+        </div>
+    </div>
+    <script src="./show-connection.js"></script>
+</body>
+
+</html>
