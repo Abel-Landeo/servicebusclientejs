@@ -28,6 +28,8 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     document.querySelector("#idSendBtn").addEventListener('click', sendMessages);
 
+    document.querySelector("#idJsonfyLink").addEventListener('click', prettifyJson);
+
     window.ipcApi.handleProgress( (_event, value) => {
         document.querySelector('#idIpcLog').innerText = value;
     } );
@@ -264,6 +266,21 @@ async function downloadMessages(evt) {
         });
     } finally {
         evt.target.disabled = false;
+    }
+
+}
+
+/**
+ * 
+ * @param {MouseEvent} evt 
+ */
+function prettifyJson(evt) {
+    try {
+        let preContent = document.querySelector("#idTaBodyMessage").value;
+        let jsonContent = JSON.parse(preContent);
+        document.querySelector("#idTaBodyMessage").value = JSON.stringify(jsonContent, null, 2);
+    } catch(err) {
+        console.error(err);
     }
 
 }
