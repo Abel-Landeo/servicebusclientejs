@@ -2,11 +2,17 @@ window.addEventListener("DOMContentLoaded", async () => {
     let searchParams = new URLSearchParams(window.location.search);
     window.connectionString = searchParams.get("string");
     window.entity = searchParams.get("entity");
+    window.connectionName = searchParams.get("name");
+
+    window.leveldb.getBodies(window.connectionName).then(bodies => {
+        document.querySelector("#idTaApplicationProps").value = JSON.stringify(bodies.applicationProps || {});
+        document.querySelector("#idTaBodyMessage").value = JSON.stringify(bodies.body || {}, null, 2);
+    });
 
     document.querySelector("#idTitle").innerHTML = `Connection name: ${window.entity}`;
 
     await displaySubs();
-
+    
     document.querySelector("#idNewBtn").addEventListener('click', async evt => {
         let newSubsName = document.querySelector("#idTextNewSubs").value.trim();
         if (!newSubsName) {
@@ -224,6 +230,7 @@ async function sendMessages(evt) {
         let body = JSON.parse(bodyContent);
 
         await window.servicebus.publish(window.connectionString, window.entity, body, applicationProps);
+        await window.leveldb.setBodies(window.connectionName, {body, applicationProps});
         alert("Publish Ok");
 
     } catch(err) {

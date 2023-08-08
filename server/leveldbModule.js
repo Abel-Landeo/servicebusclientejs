@@ -53,9 +53,34 @@ async function deleteConnection(connectionName) {
     await setConnections(filteredConnections);
 }
 
+/**
+ * Stores bodies per connection name
+ * @param {String} connectionName 
+ * @param {Map} bodies
+ */
+async function setBodies(connectionName, bodies) {
+    await db.put(connectionName, bodies);    
+}
+
+/**
+ * Retreives bodies from specific connection name
+ * @param {String} connectionName 
+ * @returns {Promise<Map>}
+ */
+async function getBodies(connectionName) {
+    try {
+        return await db.get(connectionName);
+    } catch (err) {
+        console.error(err);
+        return {};
+    }
+}
+
 module.exports = {
     setConnections,
     getConnections,
     addConnection,
-    deleteConnection
+    deleteConnection,
+    setBodies,
+    getBodies
 }
