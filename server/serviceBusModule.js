@@ -48,6 +48,11 @@ async function publish(connectionString, name, messages, applicationProps = {}) 
     }
 }
 
+async function getTopicProperties(connectionString, name) {
+    const sbAdmin = new sb.AdminServiceBus(connectionString, name);
+    return await sbAdmin.getTopicProperties();
+}
+
 module.exports = {
     listRuntimeSubscriptions,
     getProps,
@@ -55,5 +60,6 @@ module.exports = {
     createSubs,
     updateConfig,
     retrieveMessages,
-    publish
+    publish,
+    getTopicProperties
 };

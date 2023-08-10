@@ -106,6 +106,20 @@ class AdminServiceBus extends AzureServiceBus {
         await Promise.all(promises);
     }
 
+    async getTopicProperties() {
+        const sbAdmin = new ServiceBusAdministrationClient(this.connectionString);
+        let [properties, runtimeProperties] = await Promise.all([
+            sbAdmin.getTopic(this.name),
+            sbAdmin.getTopicRuntimeProperties(this.name)
+        ]);
+        runtimeProperties.sizeInMegaBytes = runtimeProperties.sizeInBytes / (1024 * 1024);
+        return {
+            runtimeProperties,
+            properties
+            
+        }
+    }
+
 }
 
 class ClientServiceBus extends AzureServiceBus {

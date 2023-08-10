@@ -9,7 +9,13 @@ window.addEventListener("DOMContentLoaded", async () => {
         document.querySelector("#idTaBodyMessage").value = JSON.stringify(bodies.body || {}, null, 2);
     });
 
-    document.querySelector("#idTitle").innerHTML = `Connection name: ${window.entity}`;
+    document.querySelector("#idTitle").append(`Connection name: ${window.entity}`);
+    let topicInfoBtn = document.querySelector("#idTopicInfoBtn");
+    topicInfoBtn.addEventListener('click', async evt => {
+        let topicProperties = await window.servicebus.getTopicProperties(window.connectionString, window.entity);
+        document.querySelector("#idTextArea").value = JSON.stringify(topicProperties, null, 2);
+    });
+    
 
     await displaySubs();
     
