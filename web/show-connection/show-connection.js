@@ -188,7 +188,14 @@ async function retrieveMessages(evt) {
             showButton.innerText = "detail";
             showButton.setAttribute("data-message-body", JSON.stringify(curatedMessage));
             showButton.addEventListener('click', evt => {
+                /** @type {HTMLButtonElement} */
                 let targetBtn = evt.target;
+                
+                Array.from(receiveList.children).forEach(child => {
+                    child.style.fontWeight = null;                    
+                });
+                targetBtn.parentElement.style.fontWeight = "bold";
+                
                 let messageObj = JSON.parse(targetBtn.getAttribute("data-message-body"));
 
                 document.querySelector("#idTaMessage").value = JSON.stringify(messageObj, null, 2);
