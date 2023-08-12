@@ -276,7 +276,6 @@ async function downloadMessages(evt) {
         }
 
         let dlCheck = document.querySelector("#idDlCheck").checked;
-        console.log("ff")
         window.ipcApi.initDownload({
             connectionString: window.connectionString,
             name: window.entity,
