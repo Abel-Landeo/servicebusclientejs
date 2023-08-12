@@ -21,7 +21,7 @@ ipcMain.on('init-download', async (event, topicData) => {
                 deliveryCount: message.deliveryCount,
                 enqueuedSequenceNumber: message.enqueuedSequenceNumber
             };
-            fileWritable.write(JSON.stringify(curatedMessage));
+            fileWritable.write(`${JSON.stringify(curatedMessage)}\n`);
         });
         totalMessageCount += messages.length;
         event.sender.send('progress-download', `${totalMessageCount} messages written`);
