@@ -8,6 +8,7 @@ async function displayConnections() {
      * @type {import("../../server/leveldbModule").connection[]}
      */
     const connections = await window.leveldb.getConnections();
+    console.log(connections);
     document.getElementById("totalConnections").innerText = connections.length;
     
     /** @type {HTMLOListElement} */
@@ -27,10 +28,27 @@ async function displayConnections() {
         deleteButtonElement.innerText = "Delete";
         deleteButtonElement.setAttribute("data-connection-name", connection.name);
         deleteButtonElement.addEventListener('click', deleteConnection);
-        liElement.append(deleteButtonElement);
+        liElement.append(deleteButtonElement, " ");
+
+        let spanUpElement = document.createElement("span");
+        spanUpElement.append("up");
+        spanUpElement.classList.add("linklike");
+        spanUpElement.addEventListener('click', _evt => moveConnection(connection.name, -1));
+        liElement.append(spanUpElement, " ");
+        
+        let spanDownElement = document.createElement("span");
+        spanDownElement.append("down");
+        spanDownElement.classList.add("linklike");
+        spanDownElement.addEventListener('click', _evt => moveConnection(connection.name, 1));
+        liElement.append(spanDownElement);        
 
         mainList.append(liElement);
     }
+}
+
+async function moveConnection(connectionName, move) {
+    await window.leveldb.moveConnection(connectionName, move);
+    await displayConnections();
 }
 
 /**

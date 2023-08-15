@@ -76,11 +76,26 @@ async function getBodies(connectionName) {
     }
 }
 
+async function moveConnection(connectionName, move) {
+    let connections = await getConnections();
+    let index = connections.findIndex(connection => connection.name === connectionName);
+    if (index === -1) {
+        return;
+    }
+    let newIndex = index + move;
+    if (newIndex < 0 || newIndex >= connections.length ) {
+        return;
+    }
+    [ connections[index], connections[newIndex] ] = [ connections[newIndex], connections[index] ];
+    await setConnections(connections);
+}
+
 module.exports = {
     setConnections,
     getConnections,
     addConnection,
     deleteConnection,
     setBodies,
-    getBodies
+    getBodies,
+    moveConnection
 }
