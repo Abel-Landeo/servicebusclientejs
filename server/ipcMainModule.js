@@ -6,7 +6,7 @@ ipcMain.on('init-download', async (event, topicData) => {
     event.sender.send('progress-download', 'Initiating download...');
     let sbClient = new ClientServiceBus(topicData.connectionString, topicData.name, topicData.subsName);
     const dir = app.getPath("downloads");
-    const filePath = `${dir}/${new Date().toJSON()}__${topicData.name}__${topicData.subsName}__${topicData.dlCheck?"dl":"main"}.jsonl`;
+    const filePath = `${dir}/${new Date().toJSON().replaceAll(":","")}__${topicData.name}__${topicData.subsName}__${topicData.dlCheck?"dl":"main"}.jsonl`;
     const fileWritable = fs.createWriteStream(filePath, { flags: "a" });
     let totalMessageCount = 0;
     await sbClient.peekAndProcess(5, topicData.dlCheck, messages => {
