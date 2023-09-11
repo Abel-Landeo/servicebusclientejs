@@ -23,6 +23,12 @@ async function displayConnections() {
         openButtonElement.setAttribute("data-connection", JSON.stringify(connection));
         openButtonElement.addEventListener("click", openConnection);
         liElement.append(openButtonElement, " ");
+
+        let updateButton = document.createElement("button");
+        updateButton.innerText = "Update";
+        updateButton.setAttribute("data-connection-name", connection.name);
+        updateButton.addEventListener("click", updateConnection);
+        liElement.append(updateButton, " ");
         
         let deleteButtonElement = document.createElement("button");
         deleteButtonElement.innerText = "Delete";
@@ -78,4 +84,17 @@ async function deleteConnection(evt) {
         await displayConnections();
     }
         
+}
+
+/**
+ * 
+ * @param {MouseEvent} evt 
+ */
+async function updateConnection(evt) {
+    /** @type {HTMLButtonElement} */
+    let updateButton = evt.target;
+    let connectionName = updateButton.getAttribute("data-connection-name");
+    let searchParams = new URLSearchParams();
+    searchParams.append("connection-name", connectionName);
+    document.location.href = `./../update-connection/update-connection.html?${searchParams.toString()}`;
 }

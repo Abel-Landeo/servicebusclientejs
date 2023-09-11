@@ -34,12 +34,34 @@ async function getConnections() {
 }
 
 /**
+ * retreive one connection from connectionName
+ * @param {String} connectionName
+ * @returns {connection}
+ */
+async function getConnection(connectionName) {
+    let currentConnections = await getConnections();
+    return currentConnections.find(c => c.name === connectionName, {});
+}
+
+/**
  * add a connection
  * @param {connection} connection 
  */
 async function addConnection(connection) {
     let currentConnections = await getConnections();
     currentConnections.push(connection);
+    await setConnections(currentConnections);
+}
+
+/**
+ * update a connection
+ * @param {String} originalName
+ * @param {connection} connection 
+ */
+async function updateConnection(originalName, connection) {
+    let currentConnections = await getConnections();
+    let foundedIndex = currentConnections.findIndex(c => c.name === originalName);
+    currentConnections[foundedIndex] = connection;
     await setConnections(currentConnections);
 }
 
@@ -94,6 +116,8 @@ module.exports = {
     setConnections,
     getConnections,
     addConnection,
+    updateConnection,
+    getConnection,
     deleteConnection,
     setBodies,
     getBodies,

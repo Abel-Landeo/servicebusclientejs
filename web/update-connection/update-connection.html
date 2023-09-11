@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update connection</title>
+    <link rel="stylesheet" href="../common/main.css">
+</head>
+
+<body>
+    <div class="row">
+        <div class="column width-menu">
+            <div class="vertical-menu">
+            </div>
+            <script src="../common/menu.js"></script>
+        </div>
+        <div class="column width-content">
+            <form name="connection" novalidate>
+                <input type="hidden" name="originalName" required>
+                <label>Connection name</label>
+                <input type="text" name="name" placeholder="connection name" required>
+
+                <label>Connection string</label>
+                <input type="text" name="string" placeholder="connection string" required>
+
+                <label>Connection entity</label>
+                <input type="text" name="entity" placeholder="connection entity" required>
+
+                <label>Connection type</label>
+                <select name="type">
+                    <option value="topic">topic</option>
+                    <option value="queue">queue</option>
+                </select>
+                <input type="submit" name="bsubmit" value="Update">
+            </form>
+        </div>
+    </div>
+    <script src="./update-connection.js"></script>
+</body>
+</html>
