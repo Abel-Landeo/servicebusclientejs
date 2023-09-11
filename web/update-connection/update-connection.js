@@ -9,6 +9,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     document.connection["string"].value = connection.string;
     document.connection["entity"].value = connection.entity;
     document.connection["type"].value = connection.type;
+    document.connection["color"].value = connection.color;
     
 });
 
@@ -20,7 +21,8 @@ document.forms[0].addEventListener('submit', e => {
         name: f.name.value,
         string: f.string.value,
         entity: f.entity.value,
-        type: f.type.value
+        type: f.type.value,
+        color: f.color.value
     };
     let originalName = f.originalName.value;
     try {

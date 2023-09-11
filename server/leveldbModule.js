@@ -10,6 +10,7 @@ const KEY_CONNECTIONS = "key_connections";
  * @property {string} string
  * @property {string} entity
  * @property {string} type
+ * @property {string} color
  */
 
 /**

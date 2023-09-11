@@ -8,7 +8,6 @@ async function displayConnections() {
      * @type {import("../../server/leveldbModule").connection[]}
      */
     const connections = await window.leveldb.getConnections();
-    console.log(connections);
     document.getElementById("totalConnections").innerText = connections.length;
     
     /** @type {HTMLOListElement} */
@@ -16,7 +15,9 @@ async function displayConnections() {
     mainList.innerHTML = "";
     for (let connection of connections) {
         let liElement = document.createElement("li");
-        
+        liElement.style.color = connection.color;
+        liElement.style.fontWeight = 'bold';
+                
         liElement.append(connection.name, " ");
         let openButtonElement = document.createElement("button");
         openButtonElement.innerText = "Open";
@@ -50,6 +51,31 @@ async function displayConnections() {
 
         mainList.append(liElement);
     }
+    /** @type {HTMLInputElement} */
+    let inputFilter = document.querySelector("#inputFilterId");
+    inputFilter.disabled = false;
+    inputFilter.setAttribute("placeholder", "filter connection");
+    inputFilter.focus();
+    inputFilter.addEventListener("keyup", filterConnectionListener);
+}
+
+/**
+ * 
+ * @param {KeyboardEvent} evt 
+ */
+async function filterConnectionListener(evt) {
+    let partialValue = evt.target.value;
+    /** @type {NodeListOf<HTMLLIElement} */
+    let liElements = document.querySelectorAll("#mainList li");
+    let liArray = Array.from(liElements);
+    liArray.forEach(e => e.style.display = '');
+    liArray
+        .filter(e => !e.innerHTML.startsWith(partialValue))
+        .forEach(e => {
+            e.style.display = 'none';
+        });
+
+        
 }
 
 async function moveConnection(connectionName, move) {
