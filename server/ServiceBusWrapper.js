@@ -130,8 +130,8 @@ class ClientServiceBus extends AzureServiceBus {
         this.#subsName = subsName;
     }
 
-    async peekMessages(isDeadLetter = false, isPeekAndDelete = false) {
-        const peekSize = 50;
+    async peekMessages(isDeadLetter = false, isPeekAndDelete = false, maxNumber = 10) {
+        let peekSize = maxNumber > 50 ? 50 : maxNumber;
         const sbClient = new ServiceBusClient(this.connectionString);
         let options = isDeadLetter?{subQueueType: "deadLetter"}:{};
         let receiver = sbClient.createReceiver(this.name, this.#subsName, options);
@@ -150,6 +150,11 @@ class ClientServiceBus extends AzureServiceBus {
                     peekedMessages.map(peekedMessage => receiver.completeMessage(peekedMessage))
                 );
             }
+
+            if (messages.length >= maxNumber) {
+                break;
+            }
+
             if (isPeekAndDelete) {
                 peekedMessages = await receiver.receiveMessages(peekSize);
             } else {

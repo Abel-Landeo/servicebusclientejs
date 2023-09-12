@@ -16,7 +16,6 @@ window.addEventListener("DOMContentLoaded", async () => {
         document.querySelector("#idTextArea").value = JSON.stringify(topicProperties, null, 2);
     });
     
-
     await displaySubs();
     
     document.querySelector("#idNewBtn").addEventListener('click', async evt => {
@@ -158,14 +157,15 @@ async function retrieveMessages(evt) {
         }
 
         let dlCheck = document.querySelector("#idDlCheck").checked;
+        let maxNumber =  parseInt(document.querySelector("#idMaxNumber").value, 10) || Infinity;
 
         /** @type {import("@azure/service-bus").ServiceBusReceivedMessage[]} */
         let messages = await window.servicebus.retrieveMessages(
             window.connectionString,
             window.entity,
-            receiveSelect.value,
-            dlCheck,
-            receiveCheck);
+            receiveSelect.value, 
+            { dlCheck, receiveCheck, maxNumber}
+        );
 
         document.querySelector("#idTblTitle").innerHTML = `<strong>Total: ${messages.length}</strong>`;
 

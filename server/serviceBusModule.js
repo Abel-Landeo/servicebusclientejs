@@ -33,9 +33,17 @@ async function updateConfig(connectionString, name, configObj) {
     ]);
 }
 
-async function retrieveMessages(connectionString, name, subs, isDeadLetter, isPeekAndDelete) {
+/**
+ * 
+ * @param {String} connectionString 
+ * @param {String} name 
+ * @param {String} subs 
+ * @param {Object} params isDeadLetter, isPeekAndDelete, maxNumber
+ * @returns {Promise<import('@azure/service-bus').ServiceBusReceivedMessage[]>}
+ */
+async function retrieveMessages(connectionString, name, subs, params) {
     const sbClient = new sb.ClientServiceBus(connectionString, name, subs);
-    return await sbClient.peekMessages(isDeadLetter, isPeekAndDelete);
+    return await sbClient.peekMessages(params.isDeadLetter, params.isPeekAndDelete, params.maxNumber);
 }
 
 async function publish(connectionString, name, messages, applicationProps = {}) {
