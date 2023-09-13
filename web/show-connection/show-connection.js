@@ -164,7 +164,11 @@ async function retrieveMessages(evt) {
             window.connectionString,
             window.entity,
             receiveSelect.value, 
-            { dlCheck, receiveCheck, maxNumber}
+            {
+                isDeadLetter: dlCheck, 
+                isPeekAndDelete: receiveCheck, 
+                maxNumber
+            }
         );
 
         document.querySelector("#idTblTitle").innerHTML = `<strong>Total: ${messages.length}</strong>`;
