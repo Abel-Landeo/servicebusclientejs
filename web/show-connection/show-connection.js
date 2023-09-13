@@ -45,6 +45,12 @@ window.addEventListener("DOMContentLoaded", async () => {
         document.querySelector('#idIpcLog').innerText = value;
     } );
 
+    document.querySelector("#idOpenFileBtn").addEventListener("click", openDialog);
+
+    window.ipcApi.openDialogReply( (_event, value) => {
+        document.querySelector("#idTaBodyMessage").value = value;
+    } );
+
 });
 
 async function displaySubs() {
@@ -306,4 +312,12 @@ function prettifyJson(evt) {
         console.error(err);
     }
 
+}
+
+/**
+ * 
+ * @param {MouseEvent} evt 
+ */
+function openDialog(evt) {
+    window.ipcApi.openDialog();
 }

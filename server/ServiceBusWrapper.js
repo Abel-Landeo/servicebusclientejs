@@ -185,14 +185,19 @@ class SenderServiceBus extends AzureServiceBus {
         super(connectionString, name);
     }
 
-    async publish(message, appProps = {}) {
+    async publish(messages, appProps = {}) {
+        if ( !Array.isArray(messages) ) {
+            messages = [messages];
+        }
         const sbClient = new ServiceBusClient(this.connectionString);
         const sender = sbClient.createSender(this.name);
-        let messageWrapper = {
-            body: message, 
-            applicationProperties: appProps
-        };
-        await sender.sendMessages(messageWrapper);
+        for (let message of messages) {
+            let messageWrapper = {
+                body: message, 
+                applicationProperties: appProps
+            };
+            await sender.sendMessages(messageWrapper);
+        }
         await sender.close();
         await sbClient.close();
     }

@@ -48,12 +48,8 @@ async function retrieveMessages(connectionString, name, subs, params) {
 
 async function publish(connectionString, name, messages, applicationProps = {}) {
     const sbSender = new sb.SenderServiceBus(connectionString, name);
-    if ( !Array.isArray(messages) ) {
-        messages = [messages];
-    }
-    for (let message of messages) {
-        await sbSender.publish(message, applicationProps);
-    }
+    await sbSender.publish(messages, applicationProps);
+    
 }
 
 async function getTopicProperties(connectionString, name) {
