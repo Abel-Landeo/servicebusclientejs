@@ -130,8 +130,28 @@ class ClientServiceBus extends AzureServiceBus {
         this.#subsName = subsName;
     }
 
-    async peekMessages(isDeadLetter = false, isPeekAndDelete = false, maxNumber = 10) {
-        let peekSize = maxNumber > 50 ? 50 : maxNumber;
+    async peekSome(isDeadLetter = false, isPeekAndDelete = false, maxNumber = 10) {
+        const sbClient = new ServiceBusClient(this.connectionString);
+        let options = isDeadLetter?{subQueueType: "deadLetter"}:{};
+        let receiver = sbClient.createReceiver(this.name, this.#subsName, options);
+        let peekedMessages;
+        if (isPeekAndDelete) {
+            peekedMessages = await receiver.receiveMessages(maxNumber);
+        } else {
+            peekedMessages = await receiver.peekMessages(maxNumber);
+        }
+        if (isPeekAndDelete && peekedMessages.length > 0) {
+            await Promise.all(
+                peekedMessages.map(peekedMessage => receiver.completeMessage(peekedMessage))
+            );
+        }
+        await receiver.close();
+        await sbClient.close();
+        return peekedMessages;
+    }
+
+    async peekAll(isDeadLetter = false, isPeekAndDelete = false) {
+        let peekSize = 100;
         const sbClient = new ServiceBusClient(this.connectionString);
         let options = isDeadLetter?{subQueueType: "deadLetter"}:{};
         let receiver = sbClient.createReceiver(this.name, this.#subsName, options);
@@ -146,20 +166,15 @@ class ClientServiceBus extends AzureServiceBus {
         while (peekedMessages.length > 0) {
             messages = messages.concat(peekedMessages);
             if (isPeekAndDelete) {
-                await Promise.all(
-                    peekedMessages.map(peekedMessage => receiver.completeMessage(peekedMessage))
-                );
-            }
-
-            if (messages.length >= maxNumber) {
-                break;
-            }
-
-            if (isPeekAndDelete) {
                 peekedMessages = await receiver.receiveMessages(peekSize);
             } else {
                 peekedMessages = await receiver.peekMessages(peekSize);
             }
+        }
+        if (isPeekAndDelete) {
+            await Promise.all(
+                messages.map(peekedMessage => receiver.completeMessage(peekedMessage))
+            );
         }
         await receiver.close();
         await sbClient.close();

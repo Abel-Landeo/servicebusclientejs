@@ -43,7 +43,12 @@ async function updateConfig(connectionString, name, configObj) {
  */
 async function retrieveMessages(connectionString, name, subs, params) {
     const sbClient = new sb.ClientServiceBus(connectionString, name, subs);
-    return await sbClient.peekMessages(params.isDeadLetter, params.isPeekAndDelete, params.maxNumber);
+    if (params.maxNumber === Infinity) {
+        return await sbClient.peekAll(params.isDeadLetter, params.isPeekAndDelete);
+    } else {
+        return await sbClient.peekSome(params.isDeadLetter, params.isPeekAndDelete, params.maxNumber);
+    }
+    
 }
 
 async function publish(connectionString, name, messages, applicationProps = {}) {
