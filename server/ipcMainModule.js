@@ -10,7 +10,7 @@ ipcMain.on('init-download', async (event, topicData) => {
     const filePath = `${dir}/${new Date().toJSON().replaceAll(":", "")}__${topicData.name}__${topicData.subsName}__${topicData.dlCheck ? "dl" : "main"}.jsonl`;
     const fileWritable = fs.createWriteStream(filePath, { flags: "a" });
     let totalMessageCount = 0;
-    await sbClient.peekAndProcess(5, topicData.dlCheck, messages => {
+    await sbClient.peekAndProcess(10, topicData.dlCheck, messages => {
         messages.forEach(message => {
             let curatedMessage = {
                 enqueuedTimeUtc: message.enqueuedTimeUtc,
