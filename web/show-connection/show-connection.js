@@ -46,10 +46,14 @@ window.addEventListener("DOMContentLoaded", async () => {
     } );
 
     document.querySelector("#idOpenFileBtn").addEventListener("click", openDialog);
-
     window.ipcApi.openDialogReply( (_event, value) => {
         document.querySelector("#idTaBodyMessage").value = value;
     } );
+
+    document.querySelector("#idMassiveSendBtn").addEventListener("click", massiveSendDialog);
+    window.ipcApi.massiveSendDialogReply( (_event, value) => {
+        document.querySelector('#idMassiveSendLog').innerText = value;
+    });
 
 });
 
@@ -320,4 +324,15 @@ function prettifyJson(evt) {
  */
 function openDialog(evt) {
     window.ipcApi.openDialog();
+}
+
+function massiveSendDialog(evt) {
+    let applicationPropsContent = document.querySelector("#idTaApplicationProps").value;
+    let applicationProps = JSON.parse(applicationPropsContent);
+    const topicData = {
+        connectionString: window.connectionString,
+        entity: window.entity,
+        applicationProps
+    };
+    window.ipcApi.massiveSendDialog(topicData);
 }

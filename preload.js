@@ -10,5 +10,8 @@ contextBridge.exposeInMainWorld("ipcApi", {
     handleProgress: callback => ipcRenderer.on('progress-download', callback),
 
     openDialog: () => ipcRenderer.send("open-dialog"),
-    openDialogReply: callback => ipcRenderer.on('open-dialog-reply', callback)
+    openDialogReply: callback => ipcRenderer.on('open-dialog-reply', callback),
+
+    massiveSendDialog: topicData => ipcRenderer.send("massive-send-dialog", topicData),
+    massiveSendDialogReply: callback => ipcRenderer.on('massive-send-dialog-reply', callback)
 });

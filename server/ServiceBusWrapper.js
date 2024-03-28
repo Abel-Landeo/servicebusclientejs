@@ -200,7 +200,7 @@ class SenderServiceBus extends AzureServiceBus {
         super(connectionString, name);
     }
 
-    async publish(messages, appProps = {}) {
+    async publish(messages, appProps = {}, callback = () => {}) {
         if ( !Array.isArray(messages) ) {
             messages = [messages];
         }
@@ -212,6 +212,7 @@ class SenderServiceBus extends AzureServiceBus {
                 applicationProperties: appProps
             };
             await sender.sendMessages(messageWrapper);
+            callback();
         }
         await sender.close();
         await sbClient.close();

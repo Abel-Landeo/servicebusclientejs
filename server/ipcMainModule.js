@@ -1,5 +1,5 @@
 const { ipcMain, app, Notification, dialog } = require('electron');
-const { ClientServiceBus } = require('./ServiceBusWrapper');
+const { ClientServiceBus, SenderServiceBus } = require('./ServiceBusWrapper');
 const fsm = require('./fsModule');
 const fs = require('fs');
 
@@ -48,8 +48,27 @@ ipcMain.on("open-dialog", async (event) => {
     });
     if (!result.canceled) {
         let filePath = result.filePaths[0];
-        console.log("here", filePath);
         let items = await fsm.loadJsonFile(filePath);
         event.sender.send('open-dialog-reply', JSON.stringify(items));
+    }
+});
+
+ipcMain.on("massive-send-dialog", async (event, topicData) => {
+    let result = await dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [
+            {name: "Json files", extensions: ["jsonl", "json"]}
+        ]
+    });
+    if (!result.canceled) {
+        let filePath = result.filePaths[0];
+        let items = await fsm.loadJsonFile(filePath);
+        event.sender.send('massive-send-dialog-reply', `Loaded ${items.length} items, creating sender...`);
+        let senderSb = new SenderServiceBus(topicData.connectionString, topicData.entity);
+        let total = items.length;
+        let c = 0;
+        await senderSb.publish(items, topicData.applicationProps, () => {
+            event.sender.send('massive-send-dialog-reply', `Published ${++c} of ${total}`);
+        });
     }
 });
