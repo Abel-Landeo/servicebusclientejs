@@ -199,7 +199,7 @@ async function retrieveMessages(evt) {
             };
             let liElement = document.createElement("li");
             let showButton = document.createElement("button");
-            showButton.innerText = "detail";
+            showButton.innerText = "view";
             showButton.setAttribute("data-message-body", JSON.stringify(curatedMessage));
             showButton.addEventListener('click', evt => {
                 /** @type {HTMLButtonElement} */
